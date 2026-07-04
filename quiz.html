@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CTY4 Quiz</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; max-width: 860px; }
+h1 { font-size: 22px; margin-bottom: 15px; }
+.tabs { margin-bottom: 0; }
+.tab-btn { padding: 9px 24px; font-size: 15px; cursor: pointer; border: 2px solid #444; background: #ddd; }
+.tab-btn.active { background: #333; color: #fff; border-color: #333; }
+.panel { border: 2px solid #444; padding: 20px; }
+.question { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0; }
+.question p { margin: 0 0 6px; font-weight: bold; }
+.options label { display: block; margin: 4px 0; cursor: pointer; }
+.answer { color: green; font-weight: bold; display: none; margin-top: 6px; }
+.score { font-size: 19px; font-weight: bold; margin: 15px 0; color: #222; }
+.btn-submit { background: #333; color: #fff; padding: 9px 22px; cursor: pointer; font-size: 14px; border: none; }
+.btn-retake { background: #666; color: #fff; padding: 9px 22px; cursor: pointer; font-size: 14px; border: none; margin-left: 8px; display: none; }
+</style>
+</head>
+<body>
+<h1>CTY4 Quiz — History &amp; Geography</h1>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('his')">History</button>
+  <button class="tab-btn" onclick="switchTab('geo')">Geography</button>
+</div>
+
+<div id="panel-his" class="panel">
+  <div id="quiz-his"></div>
+  <div id="score-his" class="score"></div>
+  <button class="btn-submit" id="sub-his" onclick="doSubmit('his')">Submit</button>
+  <button class="btn-retake" id="ret-his" onclick="start('his')">Retake Quiz</button>
+</div>
+
+<div id="panel-geo" class="panel" style="display:none">
+  <div id="quiz-geo"></div>
+  <div id="score-geo" class="score"></div>
+  <button class="btn-submit" id="sub-geo" onclick="doSubmit('geo')">Submit</button>
+  <button class="btn-retake" id="ret-geo" onclick="start('geo')">Retake Quiz</button>
+</div>
+
+<script>
+// ── HISTORY QUESTIONS (50) ─────────────────────────────────────────
+// Ancient Greece (25), Ancient Egypt (10), Ancient Rome (10), Leisure (5)
+const HQ = [
+  // Ancient Greece
+  {id:1,  q:"What were the small independent city-states of Ancient Greece called?",
+   opts:["Poleis","Agoras","Empires","Colonies"], ans:0},
+  {id:2,  q:"Which two city-states were the greatest rivals in Ancient Greece?",
+   opts:["Athens and Corinth","Athens and Sparta","Sparta and Thebes","Olympia and Athens"], ans:1},
+  {id:3,  q:"What was the Acropolis in Athens?",
+   opts:["A marketplace","A harbour","A high hill where important buildings stood","An underground temple"], ans:2},
+  {id:4,  q:"Which famous temple stands on the Acropolis in Athens?",
+   opts:["Temple of Zeus","Temple of Apollo","Temple of Hera","The Parthenon"], ans:3},
+  {id:5,  q:"What type of government did the Ancient Greeks invent?",
+   opts:["Monarchy","Dictatorship","Democracy","Theocracy"], ans:2},
+  {id:6,  q:"Where were the Ancient Olympic Games held?",
+   opts:["Athens","Sparta","Olympia","Corinth"], ans:2},
+  {id:7,  q:"What was the Agora in an Ancient Greek city?",
+   opts:["A palace","A marketplace and meeting place","A temple","A fort"], ans:1},
+  {id:8,  q:"Who was the chief god of the Ancient Greeks?",
+   opts:["Apollo","Poseidon","Zeus","Ares"], ans:2},
+  {id:9,  q:"What was the home of the Ancient Greek gods called?",
+   opts:["Olympia","Mount Olympus","The Acropolis","The Parthenon"], ans:1},
+  {id:10, q:"What did Ancient Greek soldiers typically carry into battle?",
+   opts:["Swords and bows","Shield, spear, and sword","Clubs and daggers","Axes only"], ans:1},
+  {id:11, q:"What were Spartan boys trained for from a young age?",
+   opts:["Art and music","Farming","Military service","Trading"], ans:2},
+  {id:12, q:"What was a trireme?",
+   opts:["A Greek temple","A Greek feast","A type of clothing","A warship with three rows of oars"], ans:3},
+  {id:13, q:"Who was Homer?",
+   opts:["A Greek philosopher","A poet who wrote the Iliad and the Odyssey","A Greek king","A Greek general"], ans:1},
+  {id:14, q:"What story does the Iliad tell?",
+   opts:["The journey of Odysseus","The story of the Trojan War","The life of Alexander the Great","The story of the Greek gods"], ans:1},
+  {id:15, q:"What was the main building material for Ancient Greek temples?",
+   opts:["Wood","Mud brick","Marble","Sandstone"], ans:2},
+  {id:16, q:"What did Ancient Greeks use as a writing surface?",
+   opts:["Paper","Stone only","Papyrus and wax tablets","Silk"], ans:2},
+  {id:17, q:"What was the role of women in Ancient Athens?",
+   opts:["They voted in elections","They served in the army","They ran shops","They managed the household"], ans:3},
+  {id:18, q:"Who was Alexander the Great?",
+   opts:["An Athenian philosopher","A Spartan general","A Macedonian king who built a huge empire","A Roman emperor"], ans:2},
+  {id:19, q:"Which philosopher was condemned to drink hemlock poison?",
+   opts:["Plato","Aristotle","Pythagoras","Socrates"], ans:3},
+  {id:20, q:"What was a phalanx?",
+   opts:["A type of Greek pottery","A military formation of soldiers with shields and spears","A Greek warship","A Greek feast"], ans:1},
+  {id:21, q:"Which battle did the Athenians win against the Persians in 490 BC?",
+   opts:["Battle of Salamis","Battle of Thermopylae","Battle of Marathon","Battle of Plataea"], ans:2},
+  {id:22, q:"What does 'democracy' mean?",
+   opts:["Rule by priests","Rule by the people","Rule by generals","Rule by a king"], ans:1},
+  {id:23, q:"What did Ancient Greeks mainly trade?",
+   opts:["Only grain","Only gold","Olive oil, wine, and pottery","Only fish"], ans:2},
+  {id:24, q:"What types of performances did Ancient Greeks watch in their theatres?",
+   opts:["Sports events","Tragedies and comedies","Gladiator fights","Animal shows"], ans:1},
+  {id:25, q:"What was a symposium in Ancient Greece?",
+   opts:["A religious festival","A military training session","A gathering of men for discussion and feasting","A type of market"], ans:2},
+
+  // Ancient Egypt
+  {id:26, q:"What were the rulers of Ancient Egypt called?",
+   opts:["Kings","Emperors","Pharaohs","Sultans"], ans:2},
+  {id:27, q:"What were the pyramids of Ancient Egypt built to be?",
+   opts:["Temples","Palaces","Tombs for pharaohs","Homes for priests"], ans:2},
+  {id:28, q:"How were the bodies of dead Egyptian pharaohs preserved?",
+   opts:["With salt and linen bandages","With oil and clay","With water and stone","With wax and wood"], ans:0},
+  {id:29, q:"Why was the River Nile so important to Ancient Egypt?",
+   opts:["For defence only","For farming, trade, and water supply","For fishing only","For transport only"], ans:1},
+  {id:30, q:"What is hieroglyphics?",
+   opts:["A type of pyramid","The Ancient Egyptian picture writing system","An Egyptian god","A type of mummy"], ans:1},
+  {id:31, q:"Which animal was considered sacred in Ancient Egypt?",
+   opts:["Lion","Horse","Cat","Elephant"], ans:2},
+  {id:32, q:"What was a sphinx?",
+   opts:["An Egyptian boat","A stone statue with a human head and a lion's body","An Egyptian god","A type of hieroglyphic"], ans:1},
+  {id:33, q:"Which god did the Ancient Egyptians believe guided the dead to the afterlife?",
+   opts:["Ra","Osiris","Anubis","Horus"], ans:2},
+  {id:34, q:"What is the Nile Delta?",
+   opts:["A desert area","Where the Nile fans out and meets the sea","A mountain range","A type of Egyptian boat"], ans:1},
+  {id:35, q:"What was papyrus used for in Ancient Egypt?",
+   opts:["Building pyramids","Making boats only","Writing material","Food"], ans:2},
+
+  // Ancient Rome
+  {id:36, q:"On which peninsula was Ancient Rome located?",
+   opts:["Iberian Peninsula","Greek Peninsula","Italian Peninsula","Balkan Peninsula"], ans:2},
+  {id:37, q:"What was the Roman Empire?",
+   opts:["A small city-state","A vast territory ruled from Rome","A Greek colony","An Egyptian territory"], ans:1},
+  {id:38, q:"What language did the Romans speak?",
+   opts:["Greek","Latin","Egyptian","Italian"], ans:1},
+  {id:39, q:"What were Roman soldiers called?",
+   opts:["Gladiators","Legionaries","Spartans","Centurions"], ans:1},
+  {id:40, q:"What was the Colosseum in Rome?",
+   opts:["A Roman temple","A Roman palace","A large amphitheatre for entertainment","A Roman fort"], ans:2},
+  {id:41, q:"What were Roman roads famous for?",
+   opts:["Being narrow and winding","Being straight and well-built","Being made of mud","Being built only by soldiers"], ans:1},
+  {id:42, q:"What were Roman aqueducts built for?",
+   opts:["Military defence","Carrying water to Roman cities","Religious ceremonies","Storing grain"], ans:1},
+  {id:43, q:"What entertainment did Romans enjoy in the Colosseum?",
+   opts:["Theatre","Musical concerts","Gladiator fights","Olympic sports"], ans:2},
+  {id:44, q:"Who was Julius Caesar?",
+   opts:["A Roman philosopher","A famous Roman general and political leader","A Roman emperor","A Roman architect"], ans:1},
+  {id:45, q:"What was a Roman villa?",
+   opts:["A type of food","A type of road","A large Roman country house","A type of weapon"], ans:2},
+
+  // History of Leisure and Recreation
+  {id:46, q:"In approximately which year were the first Ancient Olympic Games held?",
+   opts:["776 BC","490 BC","500 BC","100 BC"], ans:0},
+  {id:47, q:"What popular Roman entertainment involved racing horse-drawn vehicles?",
+   opts:["Marathon running","Wrestling","Chariot racing","Discus throwing"], ans:2},
+  {id:48, q:"What was the main purpose of storytelling in ancient times?",
+   opts:["Entertainment only","Passing on history, culture, and values","Only for children","Only for school"], ans:1},
+  {id:49, q:"Which ancient civilisation invented the Olympic Games?",
+   opts:["Romans","Egyptians","Greeks","Persians"], ans:2},
+  {id:50, q:"What was gladiatorial combat in Ancient Rome primarily used for?",
+   opts:["Military training","Religious ceremonies","Public entertainment","Punishing criminals"], ans:2},
+];
+
+// ── GEOGRAPHY QUESTIONS (55) ──────────────────────────────────────
+// Life in India (20), Improving the Environment (10), Village Settlers (10), Leisure (5), Earthquakes & Volcanoes (10)
+const GQ = [
+  // Life in India
+  {id:1,  q:"What is the capital city of India?",
+   opts:["Mumbai","New Delhi","Chennai","Kolkata"], ans:1},
+  {id:2,  q:"Which river is considered sacred in India?",
+   opts:["Thames","Amazon","Ganges","Nile"], ans:2},
+  {id:3,  q:"What is a monsoon?",
+   opts:["A type of food","A desert wind","Seasonal heavy rainfall","A mountain range"], ans:2},
+  {id:4,  q:"What type of homes do people in many Indian plains villages live in?",
+   opts:["Wooden cabins","Stone castles","Mud-brick houses","Glass buildings"], ans:2},
+  {id:5,  q:"What is the currency of India?",
+   opts:["Dollar","Pound","Euro","Rupee"], ans:3},
+  {id:6,  q:"What is India's most widely spoken language?",
+   opts:["English","Tamil","Bengali","Hindi"], ans:3},
+  {id:7,  q:"What is the Taj Mahal?",
+   opts:["A palace","A famous white marble mausoleum","A mosque","A temple"], ans:1},
+  {id:8,  q:"Which mountain range is found in northern India?",
+   opts:["Alps","Andes","Himalayas","Rocky Mountains"], ans:2},
+  {id:9,  q:"Which group of religions is commonly practised in India?",
+   opts:["Christianity and Islam only","Buddhism only","Hinduism, Islam, Sikhism, and Christianity","Judaism and Hinduism"], ans:2},
+  {id:10, q:"What do farmers in Indian plains villages mainly grow?",
+   opts:["Only wheat","Rice and wheat","Only cotton","Only vegetables"], ans:1},
+  {id:11, q:"What is the main activity in an Indian fishing village?",
+   opts:["Mining","Manufacturing","Fishing","Tourism"], ans:2},
+  {id:12, q:"How does life in an Indian city differ from life in a village?",
+   opts:["It is the same","It is quieter and slower","It is busier with more services","There are fewer people"], ans:2},
+  {id:13, q:"Approximately how many people live in India?",
+   opts:["100 million","500 million","1.4 billion","200 million"], ans:2},
+  {id:14, q:"What type of climate does most of India have?",
+   opts:["Arctic","Tropical and warm","Very dry desert","Temperate"], ans:1},
+  {id:15, q:"What is a plains village in India?",
+   opts:["A village on a mountain","A village in a flat, low-lying area","A coastal village","A forest village"], ans:1},
+  {id:16, q:"Which is the largest city in India by population?",
+   opts:["New Delhi","Chennai","Kolkata","Mumbai"], ans:3},
+  {id:17, q:"How do people in Indian villages commonly travel short distances?",
+   opts:["Cars and taxis","Trains only","Bicycle and walking","Aeroplanes"], ans:2},
+  {id:18, q:"What is the River Ganges used for?",
+   opts:["Transport only","Drinking, farming, and religious ceremonies","Fishing only","Industrial use only"], ans:1},
+  {id:19, q:"What is the traditional Indian greeting gesture called?",
+   opts:["Handshake","Bow","Namaste","Wave"], ans:2},
+  {id:20, q:"What are traditional Indian items of clothing called?",
+   opts:["Kimonos","Saris and dhotis","Kilts","Lederhosen"], ans:1},
+
+  // Improving the Environment
+  {id:21, q:"What is pollution?",
+   opts:["Clean energy","Harmful substances that damage the environment","Planting trees","Recycling material"], ans:1},
+  {id:22, q:"What are the three R's of waste management?",
+   opts:["Remove, Replace, Rebuild","Reduce, Reuse, Recycle","Renew, Restore, Reclaim","Reduce, Repaint, Recycle"], ans:1},
+  {id:23, q:"What is litter?",
+   opts:["Books left on the floor","Rubbish dropped in public places","Recycled material","Food waste only"], ans:1},
+  {id:24, q:"Which of these is a renewable energy source?",
+   opts:["Coal","Natural gas","Oil","Wind power"], ans:3},
+  {id:25, q:"What is noise pollution?",
+   opts:["Loud music at home","A type of food","Harmful noise levels that damage the environment","Soft natural sounds"], ans:2},
+  {id:26, q:"What mainly causes oil pollution in the sea?",
+   opts:["Fishing boats","Oil spills from ships or pipelines","Swimming","Heavy rain"], ans:1},
+  {id:27, q:"Which of these actions helps the environment?",
+   opts:["Burning rubbish","Using plastic bags","Cycling instead of driving","Leaving lights on"], ans:2},
+  {id:28, q:"What does recycling mean?",
+   opts:["Throwing things away","Processing used materials to make new products","Burning waste","Burying waste"], ans:1},
+  {id:29, q:"What is the main source of air pollution in cities?",
+   opts:["Rain","Vehicle exhaust fumes","Wind","Trees"], ans:1},
+  {id:30, q:"Why is energy conservation important?",
+   opts:["It wastes resources","It has no benefit","It saves natural resources and reduces pollution","It only makes energy cheaper"], ans:2},
+
+  // Village Settlers
+  {id:31, q:"Why did early people settle in permanent villages?",
+   opts:["For entertainment","To access water, farmland, and shelter","To build cities","For trade only"], ans:1},
+  {id:32, q:"Why did early villages often grow near rivers?",
+   opts:["For swimming","For safety from animals","For water supply and fertile farmland","For fishing only"], ans:2},
+  {id:33, q:"What is a key difference between a village and a city?",
+   opts:["Cities are smaller","Villages have more services","Villages have smaller populations","They are the same"], ans:2},
+  {id:34, q:"What is special about the Balad Sayt village?",
+   opts:["It is in India","It is one of the oldest surviving villages in Oman","It is a coastal fishing village in Greece","It is a mountain village in Africa"], ans:1},
+  {id:35, q:"What do people in villages typically do for work?",
+   opts:["Office jobs","Farming, fishing, or craft work","Technology jobs","Entertainment"], ans:1},
+  {id:36, q:"What is a settlement?",
+   opts:["A disagreement","A place where people live","A type of farming","A legal document"], ans:1},
+  {id:37, q:"How do villages grow over time?",
+   opts:["They always stay the same size","They shrink","More people arrive and services develop","They become deserts"], ans:2},
+  {id:38, q:"What feature do most early villages share?",
+   opts:["Located in deserts","Built on mountains","Located near water sources","Built underground"], ans:2},
+  {id:39, q:"What was the first type of permanent human settlement?",
+   opts:["City","Village","Town","Capital"], ans:1},
+  {id:40, q:"What materials were early village homes typically made from?",
+   opts:["Steel and glass","Concrete","Stone, wood, and mud","Plastic"], ans:2},
+
+  // How Do We Spend Our Leisure Time?
+  {id:41, q:"What is leisure time?",
+   opts:["Time for work","School time","Free time for enjoyment and relaxation","Sleep time"], ans:2},
+  {id:42, q:"What is leisure land use?",
+   opts:["Land used for farming","Land used for parks, sport, and recreation","Land used for houses","Land used for factories"], ans:1},
+  {id:43, q:"Which of these is a leisure activity?",
+   opts:["Working in a factory","Going to school","Visiting a park","Paying bills"], ans:2},
+  {id:44, q:"How has leisure time changed in modern times?",
+   opts:["People have less leisure time","People have more leisure time due to shorter working hours","No change at all","Only wealthy people have leisure time"], ans:1},
+  {id:45, q:"What is the main purpose of public parks?",
+   opts:["To grow food","To provide green space and recreation for the community","To build houses","To store water"], ans:1},
+
+  // Earthquakes and Volcanoes
+  {id:46, q:"What causes earthquakes?",
+   opts:["Heavy rain","Movement of tectonic plates","Volcanic eruptions only","Strong winds"], ans:1},
+  {id:47, q:"What is a volcano?",
+   opts:["A very tall mountain","An underground river","An opening in the Earth's crust where molten rock erupts","A type of storm"], ans:2},
+  {id:48, q:"What is lava?",
+   opts:["Frozen water","Melted rock that flows from a volcano","A type of earthquake","Volcanic ash"], ans:1},
+  {id:49, q:"Which scale measures the strength of earthquakes?",
+   opts:["Beaufort Scale","Celsius Scale","Richter Scale","Decibel Scale"], ans:2},
+  {id:50, q:"Where do most earthquakes and volcanoes occur?",
+   opts:["In the middle of oceans","In deserts","In polar regions","Along the edges of tectonic plates"], ans:3},
+  {id:51, q:"What is a tsunami?",
+   opts:["A type of volcano","A powerful ocean wave caused by an earthquake","A hurricane","A desert sandstorm"], ans:1},
+  {id:52, q:"What is magma?",
+   opts:["Lava that has cooled","Volcanic ash","Molten rock beneath the Earth's surface","A type of surface rock"], ans:2},
+  {id:53, q:"What is the 'Ring of Fire'?",
+   opts:["A ring of mountains","A zone of volcanoes and earthquakes around the Pacific Ocean","A volcanic ring in Africa","An underwater volcano"], ans:1},
+  {id:54, q:"What is a dormant volcano?",
+   opts:["An actively erupting volcano","A completely dead volcano","A volcano that is not currently erupting but could erupt again","A small volcano"], ans:2},
+  {id:55, q:"What is the epicentre of an earthquake?",
+   opts:["The centre of a volcano","The point on Earth's surface directly above the earthquake's focus","The strongest part of an earthquake","An earthquake measuring instrument"], ans:1},
+];
+
+// ── STATE ─────────────────────────────────────────────────────────
+let cur = { his: [], geo: [] };
+
+// ── HELPERS ───────────────────────────────────────────────────────
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pick30(pool, sub) {
+  const key = 'prev_' + sub;
+  const prev = localStorage.getItem(key) || '';
+  let chosen, tries = 0;
+  do {
+    chosen = shuffle(pool).slice(0, 30);
+    tries++;
+  } while (tries < 30 && chosen.map(q => q.id).join(',') === prev);
+  localStorage.setItem(key, chosen.map(q => q.id).join(','));
+  return chosen;
+}
+
+// ── RENDER ────────────────────────────────────────────────────────
+function render(sub) {
+  const letters = ['A','B','C','D'];
+  const html = cur[sub].map((q, i) => `
+    <div class="question">
+      <p>${i + 1}. ${q.q}</p>
+      <div>
+        ${q.opts.map((o, oi) => `
+          <label><input type="radio" name="${sub}q${i}" value="${oi}"> ${letters[oi]}. ${o}</label>
+        `).join('')}
+      </div>
+      <div class="answer" id="${sub}a${i}">&#10003; Answer: ${letters[q.ans]}. ${q.opts[q.ans]}</div>
+    </div>
+  `).join('');
+  document.getElementById('quiz-' + sub).innerHTML = html;
+  document.getElementById('score-' + sub).textContent = '';
+  document.getElementById('sub-' + sub).style.display = 'inline-block';
+  document.getElementById('ret-' + sub).style.display = 'none';
+}
+
+// ── START ─────────────────────────────────────────────────────────
+function start(sub) {
+  cur[sub] = pick30(sub === 'his' ? HQ : GQ, sub);
+  render(sub);
+}
+
+// ── SUBMIT ────────────────────────────────────────────────────────
+function doSubmit(sub) {
+  let score = 0;
+  cur[sub].forEach((q, i) => {
+    const sel = document.querySelector('input[name="' + sub + 'q' + i + '"]:checked');
+    document.getElementById(sub + 'a' + i).style.display = 'block';
+    if (sel && parseInt(sel.value) === q.ans) score++;
+  });
+  document.getElementById('score-' + sub).textContent = 'Score: ' + score + ' / 30';
+  document.getElementById('sub-' + sub).style.display = 'none';
+  document.getElementById('ret-' + sub).style.display = 'inline-block';
+}
+
+// ── TAB SWITCH ────────────────────────────────────────────────────
+function switchTab(sub) {
+  document.getElementById('panel-his').style.display = sub === 'his' ? 'block' : 'none';
+  document.getElementById('panel-geo').style.display = sub === 'geo' ? 'block' : 'none';
+  const btns = document.querySelectorAll('.tab-btn');
+  btns[0].classList.toggle('active', sub === 'his');
+  btns[1].classList.toggle('active', sub === 'geo');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+start('his');
+start('geo');
+</script>
+</body>
+</html>
