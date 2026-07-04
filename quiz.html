@@ -13,14 +13,15 @@ h1 { font-size: 22px; margin-bottom: 15px; }
 .question { margin-bottom: 20px; padding: 10px; border-bottom: 1px solid #e0e0e0; }
 .question p { margin: 0 0 6px; font-weight: bold; }
 .options label { display: block; margin: 4px 0; }
-.question.correct { background: #e8ffe8; border-left: 4px solid #00aa00; border-bottom: 1px solid #c0e0c0; }
-.question.wrong   { background: #ffe8e8; border-left: 4px solid #cc0000; border-bottom: 1px solid #e0c0c0; }
+.question.correct { background: #d4f7d4; border: 2px solid #00aa00; }
+.question.wrong   { background: #ffd6d6; border: 2px solid #cc0000; }
 .answer { color: #006600; font-weight: bold; display: none; margin-top: 8px; }
 .ref { font-size: 12px; color: #444; font-style: italic; margin-top: 4px; }
-.wrong-label { color: red; }
+.wrong-label { color: #cc0000; font-weight: bold; }
 .score { font-size: 19px; font-weight: bold; margin: 15px 0; color: #222; }
 .btn-submit { background: #333; color: #fff; padding: 9px 22px; cursor: pointer; font-size: 14px; border: none; }
-.btn-retake { background: #666; color: #fff; padding: 9px 22px; cursor: pointer; font-size: 14px; border: none; margin-left: 8px; display: none; }
+.btn-submit:disabled { background: #999; cursor: not-allowed; }
+.btn-retake { background: #666; color: #fff; padding: 9px 22px; cursor: pointer; font-size: 14px; border: none; margin-left: 8px; }
 </style>
 </head>
 <body>
@@ -35,14 +36,14 @@ h1 { font-size: 22px; margin-bottom: 15px; }
   <div id="quiz-his"></div>
   <div id="score-his" class="score"></div>
   <button class="btn-submit" id="sub-his" onclick="doSubmit('his')">Submit</button>
-  <button class="btn-retake" id="ret-his" onclick="start('his')">Retake Quiz</button>
+  <button class="btn-retake" id="ret-his" onclick="start('his')">New Quiz</button>
 </div>
 
 <div id="panel-geo" class="panel" style="display:none">
   <div id="quiz-geo"></div>
   <div id="score-geo" class="score"></div>
   <button class="btn-submit" id="sub-geo" onclick="doSubmit('geo')">Submit</button>
-  <button class="btn-retake" id="ret-geo" onclick="start('geo')">Retake Quiz</button>
+  <button class="btn-retake" id="ret-geo" onclick="start('geo')">New Quiz</button>
 </div>
 
 <script>
@@ -1001,6 +1002,15 @@ function pick30(pool, sub) {
   return chosen;
 }
 
+// ── COMPLETION CHECK ──────────────────────────────────────────────
+function checkComplete(sub) {
+  let answered = 0;
+  for (let i = 0; i < 30; i++) {
+    if (document.querySelector('input[name="' + sub + 'q' + i + '"]:checked')) answered++;
+  }
+  document.getElementById('sub-' + sub).disabled = answered < 30;
+}
+
 // ── RENDER ────────────────────────────────────────────────────────
 function render(sub) {
   const L = ['A','B','C','D'];
@@ -1022,8 +1032,14 @@ function render(sub) {
   `).join('');
   document.getElementById('quiz-' + sub).innerHTML = html;
   document.getElementById('score-' + sub).textContent = '';
-  document.getElementById('sub-' + sub).style.display = 'inline-block';
-  document.getElementById('ret-' + sub).style.display = 'none';
+  // disable submit until all 30 answered
+  const submitBtn = document.getElementById('sub-' + sub);
+  submitBtn.style.display = 'inline-block';
+  submitBtn.disabled = true;
+  // attach listeners to enable submit once all answered
+  document.querySelectorAll('#quiz-' + sub + ' input[type="radio"]').forEach(r => {
+    r.addEventListener('change', () => checkComplete(sub));
+  });
 }
 
 // ── START ─────────────────────────────────────────────────────────
@@ -1060,7 +1076,6 @@ function doSubmit(sub) {
 
   document.getElementById('score-' + sub).textContent = 'Score: ' + score + ' / 30';
   document.getElementById('sub-' + sub).style.display = 'none';
-  document.getElementById('ret-' + sub).style.display = 'inline-block';
 }
 
 // ── TAB SWITCH ────────────────────────────────────────────────────
