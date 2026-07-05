@@ -25,11 +25,12 @@ h1 { font-size: 22px; margin-bottom: 15px; }
 </style>
 </head>
 <body>
-<h1>CTY4 Quiz — History &amp; Geography</h1>
+<h1>CTY4 Quiz — History, Geography &amp; Maths</h1>
 
 <div class="tabs">
   <button class="tab-btn active" onclick="switchTab('his')">History</button>
   <button class="tab-btn" onclick="switchTab('geo')">Geography</button>
+  <button class="tab-btn" onclick="switchTab('mat')">Maths</button>
 </div>
 
 <div id="panel-his" class="panel">
@@ -44,6 +45,13 @@ h1 { font-size: 22px; margin-bottom: 15px; }
   <div id="score-geo" class="score"></div>
   <button class="btn-submit" id="sub-geo" onclick="doSubmit('geo')">Submit</button>
   <button class="btn-retake" id="ret-geo" onclick="start('geo')">New Quiz</button>
+</div>
+
+<div id="panel-mat" class="panel" style="display:none">
+  <div id="quiz-mat"></div>
+  <div id="score-mat" class="score"></div>
+  <button class="btn-submit" id="sub-mat" onclick="doSubmit('mat')">Submit</button>
+  <button class="btn-retake" id="ret-mat" onclick="start('mat')">New Quiz</button>
 </div>
 
 <script>
@@ -977,8 +985,326 @@ const GQ = [
    ref:"Geography Book – Ch.3: Life in an Indian Fishing Village (p.30)"},
 ];
 
+// ── MATHS QUESTIONS (100) ─────────────────────────────────────────
+const MQ = [
+
+  // Chapter 3: Factors and Multiples (ids 1–15)
+  {id:1,  q:"What is a factor of a number?",
+   opts:["A number you add to another","A number that divides exactly into another number","A number larger than another","A number you subtract from another"], ans:1,
+   ref:"Maths Book – Ch.3A: Understand Factors and Multiples (p.38)"},
+  {id:2,  q:"Which of these lists ALL the factors of 12?",
+   opts:["1, 2, 3, 4, 6, 12","1, 2, 4, 12","2, 3, 4, 6","1, 2, 6, 12"], ans:0,
+   ref:"Maths Book – Ch.3A: Understand Factors and Multiples (p.38)"},
+  {id:3,  q:"What is a multiple of a number?",
+   opts:["A number that divides into another exactly","A number found by multiplying a given number by whole numbers","A number greater than 100","A number less than 10"], ans:1,
+   ref:"Maths Book – Ch.3A: Understand Factors and Multiples (p.38)"},
+  {id:4,  q:"Which of these is a multiple of 6?",
+   opts:["14","20","24","32"], ans:2,
+   ref:"Maths Book – Ch.3A: Understand Factors and Multiples (p.38)"},
+  {id:5,  q:"How many factors does the number 9 have?",
+   opts:["2","3","4","5"], ans:1,
+   ref:"Maths Book – Ch.3A: Understand Factors and Multiples (p.38)"},
+  {id:6,  q:"Which rule tells you a number is divisible by 2?",
+   opts:["The digits add up to 9","The number ends in 0, 2, 4, 6, or 8","The number ends in 0 or 5","The number is odd"], ans:1,
+   ref:"Maths Book – Ch.3B: Tests of Divisibility (p.42)"},
+  {id:7,  q:"Which rule tells you a number is divisible by 5?",
+   opts:["The number ends in 0 or 5","The number ends in 5 only","The digits add up to 5","The number is even"], ans:0,
+   ref:"Maths Book – Ch.3B: Tests of Divisibility (p.42)"},
+  {id:8,  q:"Is 135 divisible by 3?",
+   opts:["No, because 135 ends in 5","No, because 135 is odd","Yes, because the digit sum (1+3+5=9) is divisible by 3","Yes, because 135 ends in 5"], ans:2,
+   ref:"Maths Book – Ch.3B: Tests of Divisibility (p.42)"},
+  {id:9,  q:"Which of these numbers is divisible by 10?",
+   opts:["105","150","155","115"], ans:1,
+   ref:"Maths Book – Ch.3B: Tests of Divisibility (p.42)"},
+  {id:10, q:"What is a common factor of 8 and 12?",
+   opts:["6","5","4","3"], ans:2,
+   ref:"Maths Book – Ch.3A: Understand Factors and Multiples (p.38)"},
+  {id:11, q:"Which of these is NOT a factor of 18?",
+   opts:["1","6","8","9"], ans:2,
+   ref:"Maths Book – Ch.3A: Understand Factors and Multiples (p.38)"},
+  {id:12, q:"What is the lowest common multiple (LCM) of 4 and 6?",
+   opts:["24","12","8","6"], ans:1,
+   ref:"Maths Book – Ch.3A: Understand Factors and Multiples (p.38)"},
+  {id:13, q:"Why is 240 divisible by both 2 and 5?",
+   opts:["Its digits add to 6","It ends in 0, which is even and divisible by 5","It is an odd number","Its digit sum is divisible by 3"], ans:1,
+   ref:"Maths Book – Ch.3B: Tests of Divisibility (p.42)"},
+  {id:14, q:"What is the highest common factor (HCF) of 16 and 24?",
+   opts:["4","6","8","12"], ans:2,
+   ref:"Maths Book – Ch.3A: Understand Factors and Multiples (p.38)"},
+  {id:15, q:"A number is divisible by 3 if…",
+   opts:["It ends in 3","It ends in 0 or 3","Its digit sum is divisible by 3","It is an even number"], ans:2,
+   ref:"Maths Book – Ch.3B: Tests of Divisibility (p.42)"},
+
+  // Chapter 7: Area and Perimeter (ids 16–30)
+  {id:16, q:"What is the perimeter of a shape?",
+   opts:["The space inside a shape","The distance around the outside of a shape","The number of sides a shape has","The height of a shape"], ans:1,
+   ref:"Maths Book – Ch.7A: Estimate and Measure Perimeter of 2D Shapes (p.94)"},
+  {id:17, q:"What is area?",
+   opts:["The distance around a shape","The length of the longest side","The amount of space inside a 2D shape","The number of corners a shape has"], ans:2,
+   ref:"Maths Book – Ch.7B: Estimate and Measure Area of 2D Shapes (p.97)"},
+  {id:18, q:"A rectangle has length 8 cm and width 3 cm. What is its perimeter?",
+   opts:["24 cm","11 cm","22 cm","16 cm"], ans:2,
+   ref:"Maths Book – Ch.7C: Use Grids and Rules to Measure Area and Perimeter (p.101)"},
+  {id:19, q:"What unit is area measured in?",
+   opts:["cm","cm² (square centimetres)","kg","litres"], ans:1,
+   ref:"Maths Book – Ch.7B: Estimate and Measure Area of 2D Shapes (p.97)"},
+  {id:20, q:"A square has side length 5 cm. What is its area?",
+   opts:["10 cm²","20 cm²","25 cm²","15 cm²"], ans:2,
+   ref:"Maths Book – Ch.7C: Use Grids and Rules to Measure Area and Perimeter (p.101)"},
+  {id:21, q:"A rectangle has length 6 cm and width 4 cm. What is its area?",
+   opts:["10 cm²","20 cm²","24 cm²","12 cm²"], ans:2,
+   ref:"Maths Book – Ch.7C: Use Grids and Rules to Measure Area and Perimeter (p.101)"},
+  {id:22, q:"How do you find the area of a shape drawn on a square grid?",
+   opts:["Count the number of grid squares covered","Measure the perimeter only","Add the lengths of all sides","Count the corners"], ans:0,
+   ref:"Maths Book – Ch.7C: Use Grids and Rules to Measure Area and Perimeter (p.101)"},
+  {id:23, q:"What is the perimeter of a square with side length 7 cm?",
+   opts:["14 cm","28 cm","21 cm","49 cm"], ans:1,
+   ref:"Maths Book – Ch.7C: Use Grids and Rules to Measure Area and Perimeter (p.101)"},
+  {id:24, q:"How do you estimate the area of an irregular shape on a grid?",
+   opts:["Count only the complete squares","Measure the sides and multiply","Count all complete squares and estimate the partial squares","Use only a ruler"], ans:2,
+   ref:"Maths Book – Ch.7D: Estimate the Area of Irregular Shapes (p.106)"},
+  {id:25, q:"A rectangle is 10 cm long and 5 cm wide. What is its perimeter?",
+   opts:["30 cm","50 cm","15 cm","40 cm"], ans:0,
+   ref:"Maths Book – Ch.7C: Use Grids and Rules to Measure Area and Perimeter (p.101)"},
+  {id:26, q:"Which tool would you use to measure the perimeter of a shape?",
+   opts:["A weighing scale","A thermometer","A protractor","A ruler"], ans:3,
+   ref:"Maths Book – Ch.7A: Estimate and Measure Perimeter of 2D Shapes (p.94)"},
+  {id:27, q:"A garden is a rectangle 12 m long and 8 m wide. What is its area?",
+   opts:["40 m²","80 m²","96 m²","20 m²"], ans:2,
+   ref:"Maths Book – Ch.7C: Use Grids and Rules to Measure Area and Perimeter (p.101)"},
+  {id:28, q:"A shape on a 1 cm² grid covers 15 whole squares. What is its area?",
+   opts:["1 cm²","5 cm²","10 cm²","15 cm²"], ans:3,
+   ref:"Maths Book – Ch.7B: Estimate and Measure Area of 2D Shapes (p.97)"},
+  {id:29, q:"What is the formula for the area of a rectangle?",
+   opts:["Area = length + width","Area = length × width","Area = 2 × (length + width)","Area = length × length"], ans:1,
+   ref:"Maths Book – Ch.7C: Use Grids and Rules to Measure Area and Perimeter (p.101)"},
+  {id:30, q:"A rectangle has an area of 30 cm² and a length of 6 cm. What is its width?",
+   opts:["24 cm","5 cm","36 cm","180 cm"], ans:1,
+   ref:"Maths Book – Ch.7C: Use Grids and Rules to Measure Area and Perimeter (p.101)"},
+
+  // Chapter 11: Data Representation (ids 31–45)
+  {id:31, q:"What is a tally chart used for?",
+   opts:["Drawing shapes","Recording and counting data using tally marks","Measuring lengths","Sorting shapes by colour"], ans:1,
+   ref:"Maths Book – Ch.11A: Make Tally Charts and Frequency Tables (p.162)"},
+  {id:32, q:"How many does a bundle of tally marks (four lines crossed by one diagonal) represent?",
+   opts:["3","4","5","6"], ans:2,
+   ref:"Maths Book – Ch.11A: Make Tally Charts and Frequency Tables (p.162)"},
+  {id:33, q:"What is a frequency table?",
+   opts:["A table that shows shapes","A table that counts how often each item appears","A table that lists times","A table showing colours only"], ans:1,
+   ref:"Maths Book – Ch.11A: Make Tally Charts and Frequency Tables (p.162)"},
+  {id:34, q:"In a pictogram each picture represents 4 children. There are 5 pictures. How many children is that?",
+   opts:["5","9","20","40"], ans:2,
+   ref:"Maths Book – Ch.11B: Read Pictograms and Bar Charts with Scales (p.165)"},
+  {id:35, q:"What does the scale on a bar chart tell you?",
+   opts:["The title of the chart","The colour of the bars","The number that each unit on the axis represents","The number of bars in the chart"], ans:2,
+   ref:"Maths Book – Ch.11B: Read Pictograms and Bar Charts with Scales (p.165)"},
+  {id:36, q:"What is a dot plot used for?",
+   opts:["Measuring lengths","Drawing 3D shapes","Adding fractions","Showing data as dots above a number line"], ans:3,
+   ref:"Maths Book – Ch.11C: Represent Data With Dot Plots (p.169)"},
+  {id:37, q:"A dot plot shows books read by students. Three dots sit above the number 4. How many students read 4 books?",
+   opts:["1","4","3","12"], ans:2,
+   ref:"Maths Book – Ch.11C: Represent Data With Dot Plots (p.169)"},
+  {id:38, q:"What is a Venn diagram used for?",
+   opts:["Drawing graphs","Sorting data into overlapping circles to show what items have in common","Measuring angles","Drawing bar charts"], ans:1,
+   ref:"Maths Book – Ch.11D: Sort Data on Venn and Carroll Diagrams (p.172)"},
+  {id:39, q:"What does the overlapping section of a Venn diagram show?",
+   opts:["Items in neither category","Items in only the left circle","Items in only the right circle","Items that belong to both groups"], ans:3,
+   ref:"Maths Book – Ch.11D: Sort Data on Venn and Carroll Diagrams (p.172)"},
+  {id:40, q:"What is a Carroll diagram?",
+   opts:["A type of circle chart","A grid used to sort data into yes/no categories","A pictogram using photographs","A type of dot plot"], ans:1,
+   ref:"Maths Book – Ch.11D: Sort Data on Venn and Carroll Diagrams (p.172)"},
+  {id:41, q:"In a pictogram, a whole picture = 10. What does half a picture represent?",
+   opts:["1","2","4","5"], ans:3,
+   ref:"Maths Book – Ch.11B: Read Pictograms and Bar Charts with Scales (p.165)"},
+  {id:42, q:"Which best describes a frequency table?",
+   opts:["A map of distances","A chart showing data as counts","A table showing only shapes","A grid for sorting shapes"], ans:1,
+   ref:"Maths Book – Ch.11A: Make Tally Charts and Frequency Tables (p.162)"},
+  {id:43, q:"In a Carroll diagram, where would a number that is even AND greater than 10 be placed?",
+   opts:["Even, not greater than 10","Not even, greater than 10","Not even, not greater than 10","Even AND greater than 10"], ans:3,
+   ref:"Maths Book – Ch.11D: Sort Data on Venn and Carroll Diagrams (p.172)"},
+  {id:44, q:"A bar chart shows 45 children chose football. The scale goes up in 5s. How tall is that bar?",
+   opts:["5 units","9 units","45 units","4 units"], ans:1,
+   ref:"Maths Book – Ch.11B: Read Pictograms and Bar Charts with Scales (p.165)"},
+  {id:45, q:"What is the purpose of a tally mark in data collection?",
+   opts:["To draw shapes","To measure lengths","To keep a running count while collecting data","To sort shapes"], ans:2,
+   ref:"Maths Book – Ch.11A: Make Tally Charts and Frequency Tables (p.162)"},
+
+  // Chapter 12: Statistical Cycle (ids 46–55)
+  {id:46, q:"What is a statistical investigation?",
+   opts:["Drawing shapes","Collecting, organising, and interpreting data to answer a question","Measuring angles","Counting objects only"], ans:1,
+   ref:"Maths Book – Ch.12A: Plan a Statistical Investigation (p.178)"},
+  {id:47, q:"What is the first step in planning a statistical investigation?",
+   opts:["Drawing a bar chart","Recording all data immediately","Deciding on a question you want to answer","Sorting data into a Carroll diagram"], ans:2,
+   ref:"Maths Book – Ch.12A: Plan a Statistical Investigation (p.178)"},
+  {id:48, q:"What is categorical data?",
+   opts:["Data measured in numbers only","Data sorted into named groups or categories, like colours or types","Data only collected outdoors","Data that always uses fractions"], ans:1,
+   ref:"Maths Book – Ch.12B: Record and Organise Categorical and Discrete Data (p.181)"},
+  {id:49, q:"What is discrete data?",
+   opts:["Data that can only take specific whole number values, such as number of children","Data in fractions only","Data measured in continuous lengths","Data that cannot be counted"], ans:0,
+   ref:"Maths Book – Ch.12B: Record and Organise Categorical and Discrete Data (p.181)"},
+  {id:50, q:"Which of these is a statistical question?",
+   opts:["What is 4 × 5?","How many letters are in 'cat'?","What is the most popular colour in our class?","What is 100 – 37?"], ans:2,
+   ref:"Maths Book – Ch.12A: Plan a Statistical Investigation (p.178)"},
+  {id:51, q:"Why is it important to organise data before analysing it?",
+   opts:["It makes data harder to read","It only makes the data look nicer","So that patterns and answers are easier to see","Organisation is not important"], ans:2,
+   ref:"Maths Book – Ch.12B: Record and Organise Categorical and Discrete Data (p.181)"},
+  {id:52, q:"Which of these is an example of categorical data?",
+   opts:["The number of goals scored","The temperature each day","The number of children in a class","Favourite foods of class members"], ans:3,
+   ref:"Maths Book – Ch.12B: Record and Organise Categorical and Discrete Data (p.181)"},
+  {id:53, q:"What does it mean to 'interpret data'?",
+   opts:["To colour in a chart","To collect new data","To draw pictures","To read and understand what the data tells you"], ans:3,
+   ref:"Maths Book – Ch.12C: Answer Statistical Questions (p.185)"},
+  {id:54, q:"A class records how many children have each hair colour. What type of data is this?",
+   opts:["Discrete data","Continuous data","Categorical data","Fraction data"], ans:2,
+   ref:"Maths Book – Ch.12B: Record and Organise Categorical and Discrete Data (p.181)"},
+  {id:55, q:"After collecting data, what is the next step in the statistical cycle?",
+   opts:["Stop and show one chart only","Delete the data","Organise and represent the data in a chart or table","Start a new investigation immediately"], ans:2,
+   ref:"Maths Book – Ch.12A: Plan a Statistical Investigation (p.178)"},
+
+  // Chapter 13: Fractions (ids 56–75)
+  {id:56, q:"What does the denominator of a fraction tell you?",
+   opts:["How many parts are shaded","The value of the fraction","How many equal parts the whole is divided into","The top number of a fraction"], ans:2,
+   ref:"Maths Book – Ch.13B: Divide Wholes into a Number of Equal Parts (p.194)"},
+  {id:57, q:"What does the numerator of a fraction tell you?",
+   opts:["How many equal parts the whole is split into","How many parts you have","The bottom number of the fraction","The total number of parts"], ans:1,
+   ref:"Maths Book – Ch.13B: Divide Wholes into a Number of Equal Parts (p.194)"},
+  {id:58, q:"Which fraction is equivalent to 1/2?",
+   opts:["2/3","3/8","2/4","3/7"], ans:2,
+   ref:"Maths Book – Ch.13C: Find Equivalent Fractions (p.197)"},
+  {id:59, q:"What does 'equivalent fractions' mean?",
+   opts:["Fractions that look the same but have different values","Fractions with the same numerator only","Fractions that represent the same value written differently","Fractions with the same denominator only"], ans:2,
+   ref:"Maths Book – Ch.13C: Find Equivalent Fractions (p.197)"},
+  {id:60, q:"Which fraction is greater: 3/4 or 1/4?",
+   opts:["1/4","3/4","They are equal","Cannot tell"], ans:1,
+   ref:"Maths Book – Ch.13E: Compare and Order Fractions (p.203)"},
+  {id:61, q:"A whole is divided into 8 equal parts and 3 are shaded. What fraction is shaded?",
+   opts:["5/8","3/8","1/3","8/3"], ans:1,
+   ref:"Maths Book – Ch.13B: Divide Wholes into a Number of Equal Parts (p.194)"},
+  {id:62, q:"Which statement shows that more parts means each part is smaller?",
+   opts:["A pizza cut into 2 pieces has bigger slices than one cut into 8 pieces","A pizza cut into 10 pieces has bigger slices than one cut into 2 pieces","More parts always means bigger pieces","The number of cuts does not affect piece size"], ans:0,
+   ref:"Maths Book – Ch.13A: More Parts of a Whole Means Smaller Parts (p.191)"},
+  {id:63, q:"What is 50% as a fraction?",
+   opts:["1/4","1/3","3/4","1/2"], ans:3,
+   ref:"Maths Book – Ch.13F: Percentage as a Number of Parts Out of 100 (p.206)"},
+  {id:64, q:"What does 25% mean?",
+   opts:["25 out of 10","25 out of 1000","25 out of 100","25 out of 50"], ans:2,
+   ref:"Maths Book – Ch.13F: Percentage as a Number of Parts Out of 100 (p.206)"},
+  {id:65, q:"Which fraction is equivalent to 2/3?",
+   opts:["4/6","3/4","2/4","4/9"], ans:0,
+   ref:"Maths Book – Ch.13C: Find Equivalent Fractions (p.197)"},
+  {id:66, q:"Put these fractions in order from smallest to largest: 3/8, 1/8, 5/8, 7/8.",
+   opts:["1/8, 3/8, 5/8, 7/8","7/8, 5/8, 3/8, 1/8","3/8, 1/8, 5/8, 7/8","5/8, 7/8, 1/8, 3/8"], ans:0,
+   ref:"Maths Book – Ch.13E: Compare and Order Fractions (p.203)"},
+  {id:67, q:"What fraction of 1 metre is 50 cm?",
+   opts:["1/4","1/3","3/4","1/2"], ans:3,
+   ref:"Maths Book – Ch.13D: Find Fractions on Scales (p.200)"},
+  {id:68, q:"Which fraction is smaller: 1/5 or 1/3?",
+   opts:["1/3","1/5","They are equal","Cannot tell"], ans:1,
+   ref:"Maths Book – Ch.13A: More Parts of a Whole Means Smaller Parts (p.191)"},
+  {id:69, q:"What percentage is equivalent to 3/4?",
+   opts:["30%","25%","75%","40%"], ans:2,
+   ref:"Maths Book – Ch.13F: Percentage as a Number of Parts Out of 100 (p.206)"},
+  {id:70, q:"On a number line from 0 to 1, where is 3/4?",
+   opts:["Halfway between 0 and 1","Three quarters of the way from 0 to 1","A quarter of the way from 0 to 1","At the very start"], ans:1,
+   ref:"Maths Book – Ch.13D: Find Fractions on Scales (p.200)"},
+  {id:71, q:"Which is the correct way to write 'seven eighths'?",
+   opts:["8/7","7/8","7 × 8","1/8 × 7"], ans:1,
+   ref:"Maths Book – Ch.13B: Divide Wholes into a Number of Equal Parts (p.194)"},
+  {id:72, q:"What is 10% as a fraction in its simplest form?",
+   opts:["10/1","1/100","1/10","10/100"], ans:2,
+   ref:"Maths Book – Ch.13F: Percentage as a Number of Parts Out of 100 (p.206)"},
+  {id:73, q:"If you fold a rectangle in half, then in half again, how many equal parts do you get?",
+   opts:["2","4","6","8"], ans:1,
+   ref:"Maths Book – Ch.13B: Divide Wholes into a Number of Equal Parts (p.194)"},
+  {id:74, q:"Which fraction is equivalent to 3/5?",
+   opts:["6/10","5/3","3/10","6/5"], ans:0,
+   ref:"Maths Book – Ch.13C: Find Equivalent Fractions (p.197)"},
+  {id:75, q:"A pizza is cut into 6 slices and you eat 4. What fraction have you eaten?",
+   opts:["4/6","2/6","6/4","1/6"], ans:0,
+   ref:"Maths Book – Ch.13B: Divide Wholes into a Number of Equal Parts (p.194)"},
+
+  // Chapter 14: Calculating with Fractions (ids 76–90)
+  {id:76, q:"What is a unit fraction?",
+   opts:["A fraction with numerator greater than 1","A fraction equal to 1 whole","A fraction with a numerator of 1","A fraction with equal numerator and denominator"], ans:2,
+   ref:"Maths Book – Ch.14A: Finding Unit Fractions (p.213)"},
+  {id:77, q:"What is 1/4 of 20?",
+   opts:["4","5","8","10"], ans:1,
+   ref:"Maths Book – Ch.14A: Finding Unit Fractions (p.213)"},
+  {id:78, q:"What is 1/3 of 18?",
+   opts:["3","9","6","12"], ans:2,
+   ref:"Maths Book – Ch.14A: Finding Unit Fractions (p.213)"},
+  {id:79, q:"What is 1/5 of 30?",
+   opts:["5","10","6","15"], ans:2,
+   ref:"Maths Book – Ch.14A: Finding Unit Fractions (p.213)"},
+  {id:80, q:"What is 1/2 + 1/4? (Hint: convert 1/2 to quarters first.)",
+   opts:["3/4","2/6","2/4","1/2"], ans:0,
+   ref:"Maths Book – Ch.14B: Estimate and Add Fractions (p.216)"},
+  {id:81, q:"What is 2/5 + 1/5?",
+   opts:["3/10","3/5","2/5","1/5"], ans:1,
+   ref:"Maths Book – Ch.14B: Estimate and Add Fractions (p.216)"},
+  {id:82, q:"What is 3/4 − 1/4?",
+   opts:["4/8","2/8","3/8","2/4"], ans:3,
+   ref:"Maths Book – Ch.14C: Estimate and Subtract Fractions (p.219)"},
+  {id:83, q:"What is 5/6 − 2/6?",
+   opts:["7/6","5/12","3/6","3/12"], ans:2,
+   ref:"Maths Book – Ch.14C: Estimate and Subtract Fractions (p.219)"},
+  {id:84, q:"To add fractions with different denominators, what must you do first?",
+   opts:["Add the numerators","Convert them so they have the same denominator","Multiply the denominators","Subtract the smaller from the larger"], ans:1,
+   ref:"Maths Book – Ch.14B: Estimate and Add Fractions (p.216)"},
+  {id:85, q:"What is 1/8 + 3/8?",
+   opts:["4/16","4/8","2/8","3/16"], ans:1,
+   ref:"Maths Book – Ch.14B: Estimate and Add Fractions (p.216)"},
+  {id:86, q:"What is 7/10 − 4/10?",
+   opts:["11/10","3/20","3/10","4/10"], ans:2,
+   ref:"Maths Book – Ch.14C: Estimate and Subtract Fractions (p.219)"},
+  {id:87, q:"What is 3/8 + 5/8?",
+   opts:["Less than 1/2","More than 1 whole","Exactly 1 whole (8/8)","About 1/2"], ans:2,
+   ref:"Maths Book – Ch.14B: Estimate and Add Fractions (p.216)"},
+  {id:88, q:"What is 1/6 of 24?",
+   opts:["6","4","3","12"], ans:1,
+   ref:"Maths Book – Ch.14A: Finding Unit Fractions (p.213)"},
+  {id:89, q:"You have 3/4 of a cake and eat 1/4. How much is left?",
+   opts:["4/8","1/4","3/8","2/4"], ans:3,
+   ref:"Maths Book – Ch.14C: Estimate and Subtract Fractions (p.219)"},
+  {id:90, q:"Which of these fractions is greater than 1/2?",
+   opts:["1/4","3/8","2/6","5/8"], ans:3,
+   ref:"Maths Book – Ch.14B: Estimate and Add Fractions (p.216)"},
+
+  // Chapter 15: Angles, Position and Direction (ids 91–100)
+  {id:91, q:"What is an angle?",
+   opts:["The length of a side","The area inside a shape","The number of sides a shape has","The amount of turn between two lines meeting at a point"], ans:3,
+   ref:"Maths Book – Ch.15A: Estimate, Compare and Classify Angles (p.225)"},
+  {id:92, q:"What is a right angle?",
+   opts:["An angle less than 90°","An angle exactly equal to 90°","An angle greater than 90°","An angle of 180°"], ans:1,
+   ref:"Maths Book – Ch.15A: Estimate, Compare and Classify Angles (p.225)"},
+  {id:93, q:"What is an acute angle?",
+   opts:["An angle greater than 90°","An angle of exactly 90°","An angle less than 90°","An angle of exactly 180°"], ans:2,
+   ref:"Maths Book – Ch.15A: Estimate, Compare and Classify Angles (p.225)"},
+  {id:94, q:"What is an obtuse angle?",
+   opts:["An angle less than 90°","An angle of exactly 90°","An angle greater than 90° but less than 180°","An angle of exactly 180°"], ans:2,
+   ref:"Maths Book – Ch.15A: Estimate, Compare and Classify Angles (p.225)"},
+  {id:95, q:"If you face North and turn clockwise to face East, what type of turn is that?",
+   opts:["A full turn","A half turn","A three-quarter turn","A quarter turn"], ans:3,
+   ref:"Maths Book – Ch.15B: Describe Direction and Movement on a Grid (p.229)"},
+  {id:96, q:"On a coordinate grid, what does the x-axis represent?",
+   opts:["The vertical axis going up and down","The diagonal axis","The horizontal axis going left and right","The central point of the grid"], ans:2,
+   ref:"Maths Book – Ch.15C: Read and Plot Coordinates on a Grid (p.233)"},
+  {id:97, q:"What does the coordinate (3, 5) mean?",
+   opts:["3 up, 5 right","5 right, 3 up","3 right, 5 up","5 up, 3 right"], ans:2,
+   ref:"Maths Book – Ch.15C: Read and Plot Coordinates on a Grid (p.233)"},
+  {id:98, q:"A reflex angle is…",
+   opts:["Less than 90°","Exactly 90°","Between 90° and 180°","Greater than 180°"], ans:3,
+   ref:"Maths Book – Ch.15A: Estimate, Compare and Classify Angles (p.225)"},
+  {id:99, q:"You move 3 squares right and 2 squares up from the origin (0, 0). What are your coordinates?",
+   opts:["(2, 3)","(3, 2)","(3, 0)","(0, 2)"], ans:1,
+   ref:"Maths Book – Ch.15C: Read and Plot Coordinates on a Grid (p.233)"},
+  {id:100, q:"Which direction is the opposite of North?",
+   opts:["East","West","North-West","South"], ans:3,
+   ref:"Maths Book – Ch.15B: Describe Direction and Movement on a Grid (p.229)"},
+];
+
 // ── STATE ─────────────────────────────────────────────────────────
-let cur = { his: [], geo: [] };
+let cur = { his: [], geo: [], mat: [] };
 
 // ── HELPERS ───────────────────────────────────────────────────────
 function shuffle(arr) {
@@ -1044,7 +1370,8 @@ function render(sub) {
 
 // ── START ─────────────────────────────────────────────────────────
 function start(sub) {
-  cur[sub] = pick30(sub === 'his' ? HQ : GQ, sub);
+  const pool = sub === 'his' ? HQ : sub === 'geo' ? GQ : MQ;
+  cur[sub] = pick30(pool, sub);
   render(sub);
 }
 
@@ -1082,14 +1409,17 @@ function doSubmit(sub) {
 function switchTab(sub) {
   document.getElementById('panel-his').style.display = sub === 'his' ? 'block' : 'none';
   document.getElementById('panel-geo').style.display = sub === 'geo' ? 'block' : 'none';
+  document.getElementById('panel-mat').style.display = sub === 'mat' ? 'block' : 'none';
   const btns = document.querySelectorAll('.tab-btn');
   btns[0].classList.toggle('active', sub === 'his');
   btns[1].classList.toggle('active', sub === 'geo');
+  btns[2].classList.toggle('active', sub === 'mat');
 }
 
 // ── INIT ──────────────────────────────────────────────────────────
 start('his');
 start('geo');
+start('mat');
 </script>
 </body>
 </html>
